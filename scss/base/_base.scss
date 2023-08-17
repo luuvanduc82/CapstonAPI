@@ -1,0 +1,43 @@
+.font-con {
+  font-family: "Conthrax Rg";
+}
+.font-readex {
+  font-family: "Readex Pro";
+}
+body {
+  // cursor: none;
+  background: #070a29;
+}
+#mouse {
+  position: fixed;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 5px #fff, 0 0 15px #fff, 0 0 30px #fff, 0 0 60px #fff;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s;
+}
+body:hover {
+  #mouse {
+    opacity: 1;
+  }
+}
+p,
+a,
+li,
+span,
+strong {
+  font-size: 1.6rem;
+}
+.radius-12 {
+  border-radius: 12rem;
+}
+.title-main {
+  font-size: 5rem;
+}
+.fs-14 {
+  font-size: 1.4rem;
+}

@@ -1,0 +1,42 @@
+header {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  z-index: 99;
+  .navbar-brand {
+    font-size: 3rem;
+    color: #fff;
+  }
+  .nav-link {
+    font-size: 1.6rem;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    column-gap: 2rem;
+  }
+  &.header {
+    transition: all 0.4s;
+    &.transparent {
+      animation: moveDown 0.4s linear;
+      position: fixed;
+      width: 100%;
+      background: #070a29;
+      box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+#cart-count,
+.cart-numm {
+  color: white;
+  font-family: auto;
+  bottom: 80%;
+  background: #6633fe;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 1.4rem;
+}

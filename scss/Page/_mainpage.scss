@@ -1,0 +1,22 @@
+.main {
+  background: #070a29;
+  height: 100vh;
+  .box-main {
+    .img-main {
+      width: 70%;
+      animation: animate1 15s infinite;
+      height: 30rem;
+      object-fit: contain;
+    }
+    .title-page {
+      color: $color-white;
+      width: 100%;
+
+      display: block;
+      text-align: center;
+      font-size: 3rem;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+  }
+}

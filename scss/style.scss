@@ -1,1 +1,20 @@
-@import "./layout/home";
+//help\
+@import url(../assets/fonts/conthrax/stylesheet.css);
+@import url(../assets/fonts/readex/stylesheet.css);
+@import "./Helpers/variables";
+@import "./Helpers/mixin";
+@import "./Helpers/animation";
+//vender
+
+//base
+@import "./base/base";
+@import "./base/reset";
+//componets
+@import "./components/btn";
+@import "./components/header";
+@import "./components/footer";
+//layout
+
+//page
+@import "./Page/mainpage";
+@import "./Page/home";

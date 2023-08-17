@@ -1,0 +1,45 @@
+@include keyframes(animate1) {
+  0%,
+  100% {
+    -webkit-transform: translateY(0) translateX(0);
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    -webkit-transform: translateY(-1.5vh) translateX(5vmin);
+    transform: translateY(-1.5vh) translateX(5vmin);
+  }
+}
+
+@include keyframes(animate2) {
+  0%,
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+  50% {
+    -webkit-transform: translateY(-15vmin);
+    transform: translateY(-15vmin);
+  }
+}
+
+@include keyframes(animate3) {
+  0%,
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+  50% {
+    -webkit-transform: translateY(-5vmin);
+    transform: translateY(-5vmin);
+  }
+}
+@include keyframes(moveDown) {
+  0% {
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%);
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+}

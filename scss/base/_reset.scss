@@ -1,0 +1,21 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Conthrax Rg";
+  font-size: 62.5%;
+}
+ul,
+li {
+  margin: 0;
+}
+a {
+  color: #3d3d3d;
+  text-decoration: none;
+}
+input {
+  box-shadow: none;
+  &:focus {
+    outline: none;
+  }
+}
