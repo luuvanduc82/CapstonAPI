@@ -242,15 +242,29 @@
 .modal-cart {
   .icon-close {
     cursor: pointer;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   position: fixed;
   top: 100px;
-  right: 0;
+  right: -100%;
   height: 100vh;
+  opacity: 0;
+  visibility: hidden;
   overflow: auto;
   width: 40%;
   z-index: 99;
   background: linear-gradient(264.28deg, #080112 -38.2%, #5c27fe 103.12%);
+  transition: all 0.4s;
+  &.active {
+    right: 0;
+    opacity: 1;
+    visibility: visible;
+  }
   .product-item {
     .box-img {
       width: 30%;
@@ -280,5 +294,12 @@
     td {
       text-align: right;
     }
+  }
+  .overlay {
+    width: 100%;
+    background: #0000008f;
+    height: 100%;
+    position: fixed;
+    left: 0;
   }
 }

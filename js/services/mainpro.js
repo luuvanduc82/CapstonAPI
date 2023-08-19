@@ -159,7 +159,7 @@ function display(products) {
         <div
           class="box-btn d-flex justify-content-between align-items-center"
         >
-          <button class="add-cart btn-join">
+          <button onclick="addToCart(${product.id})" class="add-cart btn-join">
             <span>Add to cart</span>
           </button>
           <p class="price-pro">${product.price}<span>$</span></p>
@@ -172,6 +172,115 @@ function display(products) {
   if (as) {
     document.getElementById("prolists").innerHTML = htmlhome;
   }
+}
+
+//addtocarrt
+// function addToCart(productId) {
+//   apiGetProductById(productId)
+//     .then((response) => {
+//       let product = response.data;
+//       var cartElement = document.querySelector(".pro-list-cart");
+//       var productInfo = document.createElement("div");
+//       productInfo.innerHTML = `
+//          <div class="product-item d-flex gap-5 mb-5">
+//             <div class="box-img">
+//               <img src="${product.image}" alt="" />
+//             </div>
+//             <div class="box-content">
+//               <h3 class="product-tt">${product.name}</h3>
+//               <p class="product-dec">${product.dec}</p>
+//               <button class="btn-remove btn-join"><span>Remove</span></button>
+//             </div>
+//           </div>
+//           <div
+//           class="quantity gap-4 d-flex justify-content-between align-items-center mb-5"
+//         >
+//           <div class="quantity-box gap-5 d-flex align-items-center">
+//             <span class="quantity-txt fs-2">Qunatity:</span>
+//             <span class="minus quantity-btn fs-2">-</span>
+//             <span class="results fs-2"></span>
+//             <span class="plus quantity-btn fs-2">+</span>
+//           </div>
+//           <div class="price-cart fs-1">${product.price}$</div>
+//         </div>
+//       `;
+//       cartElement.appendChild(productInfo);
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// }
+function addToCart(productId) {
+  apiGetProductById(productId)
+    .then((response) => {
+      let product = response.data;
+      var cartElement = document.querySelector(".pro-list-cart");
+      var existingProduct = cartElement.querySelector(
+        `[data-product-id="${product.id}"]`
+      );
+
+      if (existingProduct) {
+        // Sản phẩm đã tồn tại trong giỏ hàng, tăng số lượng
+        var quantityElement = existingProduct.querySelector(".results");
+
+        var currentQuantity = parseInt(quantityElement.innerText); // Chuyển đổi chuỗi thành số
+        quantityElement.innerText = currentQuantity + 1;
+      } else {
+        // Sản phẩm chưa tồn tại trong giỏ hàng, thêm mới
+        var productInfo = document.createElement("div");
+        productInfo.dataset.productId = product.id;
+        productInfo.innerHTML = `
+          <div class="product-item d-flex gap-5 mb-5">
+            <div class="box-img">
+              <img src="${product.image}" alt="" />
+            </div>
+            <div class="box-content">
+              <h3 class="product-tt">${product.name}</h3>
+              <p class="product-dec">${product.dec}</p>
+              <button class="btn-remove btn-join"><span>Remove</span></button>
+            </div>
+          </div>
+          <div class="quantity gap-4 d-flex justify-content-between align-items-center mb-5">
+            <div class="quantity-box gap-5 d-flex align-items-center">
+              <span class="quantity-txt fs-2">Quantity:</span>
+              <span class="minus quantity-btn fs-2">-</span>
+              <span id="quantity-${product.id}" class="results fs-2">1</span>
+              <span class="plus quantity-btn fs-2">+</span>
+            </div>
+            <div class="price-cart fs-1">${product.price}$</div>
+          </div>
+        `;
+        cartElement.appendChild(productInfo);
+      }
+
+      // Lưu thông tin giỏ hàng vào Local Storage
+
+      var cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+      var existingCartItem = cartItems.find(
+        (item) => item.productId === product.id
+      );
+
+      if (existingCartItem) {
+        // Sản phẩm đã tồn tại trong Local Storage, cập nhật số lượng
+        existingCartItem.quantity += 1;
+      } else {
+        // Sản phẩm chưa tồn tại trong Local Storage, thêm mới
+        cartItems.push({ productId: product.id, quantity: 1 });
+      }
+
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+
+      // Cập nhật số lượng sản phẩm đã thêm vào giỏ hàng
+      var totalQuantity = cartItems.reduce(
+        (total, item) => total + item.quantity,
+        0
+      );
+      var cartCountElement = document.getElementById("cart-count");
+      cartCountElement.innerText = totalQuantity.toString();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 
 // DOM
