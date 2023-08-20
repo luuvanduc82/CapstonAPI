@@ -210,6 +210,9 @@ function display(products) {
 //       console.log(error);
 //     });
 // }
+var cartItems = []; // Mảng để lưu trữ dữ liệu sản phẩm
+var displayedProducts = {}; // Đối tượng để lưu trữ các sản phẩm đã hiển thị
+
 function addToCart(productId) {
   apiGetProductById(productId)
     .then((response) => {
@@ -218,71 +221,85 @@ function addToCart(productId) {
       var existingProduct = cartElement.querySelector(
         `[data-product-id="${product.id}"]`
       );
+      var quantityElement = document.querySelector(`#quantity-${product.id}`);
 
-      if (existingProduct) {
-        // Sản phẩm đã tồn tại trong giỏ hàng, tăng số lượng
-        var quantityElement = existingProduct.querySelector(".results");
-
-        var currentQuantity = parseInt(quantityElement.innerText); // Chuyển đổi chuỗi thành số
-        quantityElement.innerText = currentQuantity + 1;
-      } else {
-        // Sản phẩm chưa tồn tại trong giỏ hàng, thêm mới
-        var productInfo = document.createElement("div");
-        productInfo.dataset.productId = product.id;
-        productInfo.innerHTML = `
-          <div class="product-item d-flex gap-5 mb-5">
-            <div class="box-img">
-              <img src="${product.image}" alt="" />
-            </div>
-            <div class="box-content">
-              <h3 class="product-tt">${product.name}</h3>
-              <p class="product-dec">${product.dec}</p>
-              <button class="btn-remove btn-join"><span>Remove</span></button>
-            </div>
-          </div>
-          <div class="quantity gap-4 d-flex justify-content-between align-items-center mb-5">
-            <div class="quantity-box gap-5 d-flex align-items-center">
-              <span class="quantity-txt fs-2">Quantity:</span>
-              <span class="minus quantity-btn fs-2">-</span>
-              <span id="quantity-${product.id}" class="results fs-2">1</span>
-              <span class="plus quantity-btn fs-2">+</span>
-            </div>
-            <div class="price-cart fs-1">${product.price}$</div>
-          </div>
-        `;
-        cartElement.appendChild(productInfo);
+      // Kiểm tra xem thẻ <span> đã tồn tại hay chưa
+      if (quantityElement === null) {
+        // Tạo thẻ <span> mới
+        quantityElement = document.createElement("span");
+        quantityElement.id = `quantity-${product.id}`;
+        quantityElement.className = "results fs-2";
+        cartElement.appendChild(quantityElement);
       }
 
-      // Lưu thông tin giỏ hàng vào Local Storage
-
-      var cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-      var existingCartItem = cartItems.find(
-        (item) => item.productId === product.id
-      );
+      // Kiểm tra xem sản phẩm đã tồn tại trong mảng cartItems
+      var existingCartItem = cartItems.find((item) => item.id === product.id);
 
       if (existingCartItem) {
-        // Sản phẩm đã tồn tại trong Local Storage, cập nhật số lượng
-        existingCartItem.quantity += 1;
+        // Nếu sản phẩm đã tồn tại, tăng giá trị qty lên
+        existingCartItem.qty += 1;
+        // Cập nhật giá trị qty trong thẻ <span>
+        quantityElement.textContent = existingCartItem.qty;
       } else {
-        // Sản phẩm chưa tồn tại trong Local Storage, thêm mới
-        cartItems.push({ productId: product.id, quantity: 1 });
+        // Nếu sản phẩm chưa tồn tại, thêm sản phẩm vào mảng với giá trị qty là 1
+        product.qty = 1;
+        cartItems.push(product);
+        // Cập nhật giá trị qty trong thẻ <span>
+        quantityElement.textContent = product.qty;
       }
 
-      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+      // Kiểm tra xem sản phẩm đã được hiển thị hay chưa
+      // Kiểm tra xem sản phẩm đã được hiển thị hay chưa
+      if (!displayedProducts[product.id]) {
+        var productInfo = document.createElement("div");
+        productInfo.dataset.productId = product.id;
 
-      // Cập nhật số lượng sản phẩm đã thêm vào giỏ hàng
-      var totalQuantity = cartItems.reduce(
-        (total, item) => total + item.quantity,
-        0
-      );
-      var cartCountElement = document.getElementById("cart-count");
-      cartCountElement.innerText = totalQuantity.toString();
+        productInfo.innerHTML = `
+    <div class="product-item d-flex gap-5 mb-5">
+      <div class="box-img">
+        <img src="${product.image}" alt="" />
+      </div>
+      <div class="box-content">
+        <h3 class="product-tt">${product.name}</h3>
+        <p class="product-dec">${product.dec}</p>
+        <button class="btn-remove btn-join"><span>Remove</span></button>
+      </div>
+    </div>
+    <div class="quantity gap-4 d-flex justify-content-between align-items-center mb-5">
+      <div class="quantity-box gap-5 d-flex align-items-center">
+        <span class="quantity-txt fs-2">Quantity:</span>
+        <span class="minus quantity-btn fs-2">-</span>
+<div class="qty-num"></div>
+        <span class="plus quantity-btn fs-2">+</span>
+      </div>
+      <div class="price-cart fs-1">${product.price}$</div>
+    </div>
+  `;
+
+        // Tìm phần tử quantity-box trong productInfo
+        var quantityBox = productInfo.querySelector(".qty-num");
+
+        // Thêm thẻ span hiển thị số lượng vào quantity-box
+        quantityBox.appendChild(quantityElement);
+
+        cartElement.appendChild(productInfo);
+
+        // Đánh dấu sản phẩm đã được hiển thị
+        displayedProducts[product.id] = true;
+      }
+
+      console.log(cartItems); // In mảng sản phẩm ra console
     })
     .catch((error) => {
       console.log(error);
     });
 }
 
+function updateCartCount() {
+  var cartCountElement = document.getElementById("cart-count");
+  var totalQty = cartItems.reduce((total, item) => total + item.qty, 0);
+  cartCountElement.textContent = totalQty;
+}
 // DOM
 let btnThemsps = getElement("#btnThemSP");
 if (btnThemsps) {
